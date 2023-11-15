@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.LinkedList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -50,15 +52,18 @@ public class Signin extends HttpServlet {
 		}
 		else {
 			persona.setMail(email);
-			persona.setContrasenia(contrasenia);
+			persona.setContrasenia(ctrl.convertirSHA256(contrasenia));
 		
 			ctrl.validate(persona);
+			
+			request.getSession().setAttribute("usuario", persona);
+			
+			request.getRequestDispatcher("WEB-INF/UserManagement.jsp");
 		}
 		
 	 } catch (Exception e) {
 	    e.printStackTrace(); 
 	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error interno del servidor: " + e.getMessage());
-	    response.getWriter().append("Bienvenido: ").append(persona.getNombre());
 	}
 	}
 }
