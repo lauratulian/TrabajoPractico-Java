@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.LinkedList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,23 +42,18 @@ public class Signin extends HttpServlet {
 		Login ctrl = new Login();
 		
 		try {
-		String email = request.getParameter("email");
-		String contrasenia = request.getParameter("Contrasenia");
-		
-		if (email == null || email.isEmpty() || contrasenia == null || contrasenia.isEmpty()) {
-		    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Los parámetros no pueden estar vacíos");
-		    return;
-		}
-		else {
+		String email = request.getParameter("mail");
+		String contrasenia = request.getParameter("contrasenia");
+
 			persona.setMail(email);
-			persona.setContrasenia(ctrl.convertirSHA256(contrasenia));
+			persona.setContrasenia(contrasenia);
 		
 			ctrl.validate(persona);
 			
 			request.getSession().setAttribute("usuario", persona);
 			
-			request.getRequestDispatcher("WEB-INF/UserManagement.jsp");
-		}
+			request.getRequestDispatcher("WEB-INF/UserManagement.jsp").forward(request, response);;
+		
 		
 	 } catch (Exception e) {
 	    e.printStackTrace(); 

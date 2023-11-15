@@ -3,6 +3,7 @@ package data;
 import java.sql.*;
 import java.util.LinkedList;
 
+import entities.Categoria;
 import entities.Persona;
 
 public class DataPersona {
@@ -15,11 +16,11 @@ public class DataPersona {
 		
 		try {
 			stmt= DbConnector.getInstancia().getConn().createStatement();
-			rs= stmt.executeQuery("SELECT id,dni,nombre, email, telefono, direccion, adicional FROM persona");
+			rs= stmt.executeQuery("SELECT id_persona, dni,nombre, email, telefono, direccion, adicional FROM persona");
 			if(rs!=null) {
 				while(rs.next()) {
 					Persona persona=new Persona();
-					persona.setId(rs.getInt("id"));
+					persona.setId(rs.getInt("id_persona"));
 					persona.setDni(rs.getString("dni"));
 					persona.setNombre(rs.getString("nombre"));
 					persona.setMail(rs.getString("mail"));
@@ -51,13 +52,13 @@ public class DataPersona {
 	}
 	
 	public Persona getByUser(Persona per) {
-		DataRol dr=new DataRol();
-		Persona persona=null;
+		//DataRol dr=new DataRol();
+		Persona persona= new Persona();
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
-					"SELECT id, dni, nombre, mail, telefono, direccion, adicional FROM persona WHERE mail=? and contrasenia=?"
+					"SELECT id_persona, dni, nombre, mail, telefono, direccion, adicional FROM persona WHERE mail=? and contrasenia=?"
 					);
 			stmt.setString(1, per.getMail());
 			stmt.setString(2, per.getContrasenia());
@@ -71,8 +72,7 @@ public class DataPersona {
 				persona.setTelefono(rs.getString("telefono"));
 				persona.setDireccion(rs.getString("direccion"));
 				persona.setAdicional(rs.getString("adicional"));
-				//
-				dr.setRoles(persona);
+				//dr.setRoles(persona);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
