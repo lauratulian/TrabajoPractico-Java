@@ -48,18 +48,13 @@ public class Login {
 	
 	public Persona validate(Persona persona) 
 	{
-		Persona per= new Persona();
-		per=dataPersona.getByUser(persona);
+	Persona per = dataPersona.getByUser(persona);
 
-	    if (per.getId() == 0) {
-	   
-	        return null;
-	    }
-	    else {
-
-	    	return per;
-	    }
-	
+    if (per != null && per.getId() != 0) {
+        return per;
+    	}
+    else {
+        return null;}
 	}
 }
 

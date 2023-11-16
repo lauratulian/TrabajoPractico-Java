@@ -44,6 +44,7 @@ public class Signin extends HttpServlet {
 		try {
 		String accion= request.getParameter("accion");
 		if (accion.equalsIgnoreCase("Ingresar")) {
+			
 			String mail = request.getParameter("txtmail");
 			String pass = request.getParameter("txtpass");
 			
@@ -54,9 +55,9 @@ public class Signin extends HttpServlet {
 			
 			if(ctrl.validate(persona)!=null) {
 				
-				
-				request.getRequestDispatcher("controlador?accion=Principal").forward(request, response);
 				request.getSession().setAttribute("usuario", persona);
+				request.getRequestDispatcher("controlador?accion=Principal").forward(request, response);
+
 			}
 			
 			else {

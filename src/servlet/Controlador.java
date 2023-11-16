@@ -26,20 +26,32 @@ public class Controlador extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String accion= request.getParameter("accion");
+		switch (accion) {
+		case "Libros":
+			request.getRequestDispatcher("pages/Libros.jsp").forward(request, response);
+			break;
+		case "Contacto":
+			request.getRequestDispatcher("pages/Contacto.jsp").forward(request, response);
+			break;
+		case "Catalogo":
+			request.getRequestDispatcher("pages/Catalogo.jsp").forward(request, response);
+			break;
+		case "Ventas":
+			request.getRequestDispatcher("pages/Ventas.jsp").forward(request, response);
+			break;
+		case "Local":
+			request.getRequestDispatcher("pages/Local.jsp").forward(request, response);
+			break;
+		default:
+				throw new AssertionError();
+		}
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String accion= request.getParameter("accion");
-		switch (accion) {
-		case "Principal":
-			request.getRequestDispatcher("/pages/Principal.jsp").forward(request, response);
-			break;
-			default:
-				throw new AssertionError();
-		}
 	}
 
 }
