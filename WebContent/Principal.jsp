@@ -26,15 +26,17 @@
 						class="btn btn-outline-light"><a class="nav-link active"
 						href="">Inicio</a></li>
 					<li style="margin-left: 10px; border: none"
-						class="btn btn-outline-light"><a class="nav-link" href="controlador?accion=Libros" target="myFrame">Libros</a></li>
+						class="btn btn-outline-light"><a class="nav-link" href="controlador?menu=Libros" target="myFrame">Libros</a></li>
 					<li style="margin-left: 10px; border: none"
-						class="btn btn-outline-light"><a class="nav-link" href="controlador?accion=Catalogo" target="myFrame">Catalogo</a></li>
+						class="btn btn-outline-light"><a class="nav-link" href="controlador?menu=Catalogo" target="myFrame">Catalogo</a></li>
 					<li style="margin-left: 10px; border: none"
-						class="btn btn-outline-light"><a class="nav-link" href="controlador?accion=Local" target="myFrame">Locales</a></li>
+						class="btn btn-outline-light"><a class="nav-link" href="controlador?menu=Local" target="myFrame">Locales</a></li>
 					<li style="margin-left: 10px; border: none"
-						class="btn btn-outline-light"><a class="nav-link" href="controlador?accion=Contacto" target="myFrame">Contacto</a></li>
+						class="btn btn-outline-light"><a class="nav-link" href="controlador?menu=Contacto" target="myFrame">Contacto</a></li>
 					<li style="margin-left: 10px; border: none"
-						class="btn btn-outline-light"><a class="nav-link" href="controlador?accion=Ventas" target="myFrame">Ventas</a></li>
+						class="btn btn-outline-light"><a class="nav-link" href="controlador?menu=Ventas" target="myFrame">Ventas</a></li>
+					<li style="margin-left: 10px; border: none"
+						class="btn btn-outline-light"><a class="nav-link" href="controlador?menu=Personas&accion=Listar" target="myFrame">Clientes</a></li>
 				</ul>
 				<div class="botton">
 					<button style="border: none"
@@ -61,8 +63,9 @@
 						<div class="dropdown-divider"></div>
 						
 						<form action="signin" method="post">
-							<button name="accion" value="Salir" class="dropdown-item"
-								href="#">Salir</button>
+							<button name="accion" value="Salir" class="dropdown-item" 
+							
+							href="#">Salir</button>
 						</form>
 					</ul>
 				</div>
@@ -70,7 +73,7 @@
 		</div>
 	</nav>
 		<div class="m-4" style="height: 550px;">
-			<iframe name="myFrame" style="height: 100%; width: 100%"></iframe>
+			<iframe name="myFrame" style="height: 100%; width: 100%; border:none"></iframe>
 		</div>		
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"crossorigin="anonymous"></script>

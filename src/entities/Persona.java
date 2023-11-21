@@ -1,6 +1,5 @@
 package entities;
 
-import java.util.Date;
 import java.util.HashMap;
 
 public class Persona {
@@ -9,11 +8,11 @@ public class Persona {
 	private String nombre;
 	private String mail;
 	private String contrasenia;
-	private Date fecha_nacimiento;
 	private String telefono;
 	private String direccion;
 	private String adicional;
 	private HashMap<Integer, Rol> roles;
+	
 	
 	public int getId() {
 		return id;
@@ -47,12 +46,7 @@ public class Persona {
 	public void setContrasenia(String contrasenia) {
 		this.contrasenia = contrasenia;
 	}
-	public Date getFecha_nacimiento() {
-		return fecha_nacimiento;
-	}
-	public void setFecha_nacimiento(Date fecha_nacimiento) {
-		this.fecha_nacimiento = fecha_nacimiento;
-	}
+	
 	public String getTelefono() {
 		return telefono;
 	}
@@ -100,7 +94,7 @@ public class Persona {
 	@Override
 	public String toString() {
 		return "Persona [id=" + id + ", nombre=" + nombre + ", mail=" + mail + ", contrasenia=" + contrasenia
-				+ ", fecha_nacimiento=" + fecha_nacimiento + ", telefono=" + telefono + ", direccion=" + direccion
+				+ ", telefono=" + telefono + ", direccion=" + direccion
 				+ ", adicional=" + adicional + ", roles=" + roles + "]";
 	}
 	

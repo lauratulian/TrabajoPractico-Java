@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entities.Persona;
-import logic.Login;
+import logic.PersonaLogic;
 
 /**
  * Servlet implementation class Signin
@@ -39,7 +39,7 @@ public class Signin extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Persona persona = new Persona();
-		Login ctrl = new Login();
+		PersonaLogic ctrl = new PersonaLogic();
 		
 		try {
 		String accion= request.getParameter("accion");

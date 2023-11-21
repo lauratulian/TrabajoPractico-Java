@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import data.DataPersona;
 import entities.Persona;
 
-public class Login {
+public class PersonaLogic {
 	private DataPersona dataPersona=new DataPersona();
 	
     public LinkedList<Persona> getAll()
@@ -44,7 +44,12 @@ public class Login {
 		}
 		    
 		return sb.toString();
-		}
+	}
+	
+	public void update(Persona persona) 
+	{
+		this.dataPersona.update(persona);
+	}
 	
 	public Persona validate(Persona persona) 
 	{
@@ -55,6 +60,11 @@ public class Login {
     	}
     else {
         return null;}
+	}
+	
+	public Persona getById(Persona persona) 
+	{
+		return dataPersona.getById(persona);
 	}
 }
 

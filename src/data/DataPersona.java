@@ -15,7 +15,7 @@ public class DataPersona {
 		
 		try {
 			stmt= DbConnector.getInstancia().getConn().createStatement();
-			rs= stmt.executeQuery("SELECT id_persona, dni,nombre, email, telefono, direccion, adicional FROM persona");
+			rs= stmt.executeQuery("SELECT id_persona, dni,nombre, mail, telefono, direccion, adicional FROM persona");
 			if(rs!=null) {
 				while(rs.next()) {
 					Persona persona=new Persona();
@@ -27,7 +27,7 @@ public class DataPersona {
 					persona.setDireccion(rs.getString("direccion"));
 					persona.setAdicional(rs.getString("adicional"));
 					
-					dr.setRoles(persona);
+					//dr.setRoles(persona);
 					
 					personas.add(persona);
 				}
@@ -89,6 +89,43 @@ public class DataPersona {
 	}
 	
 	
+	public Persona getById(Persona per) {
+		//DataRol dr=new DataRol();
+		Persona persona= new Persona();
+		PreparedStatement stmt=null;
+		ResultSet rs=null;
+		try {
+			stmt=DbConnector.getInstancia().getConn().prepareStatement(
+					"SELECT id_persona, dni, nombre, mail, telefono, direccion, adicional FROM persona WHERE id_persona=?"
+					);
+			stmt.setInt(1, per.getId());
+			rs=stmt.executeQuery();
+			if(rs!=null && rs.next()) {
+				persona=new Persona();
+				persona.setId(rs.getInt("id_persona"));
+				persona.setDni(rs.getString("dni"));
+				persona.setNombre(rs.getString("nombre"));
+				persona.setMail(rs.getString("mail"));
+				persona.setTelefono(rs.getString("telefono"));
+				persona.setDireccion(rs.getString("direccion"));
+				persona.setAdicional(rs.getString("adicional"));
+				//dr.setRoles(persona);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(rs!=null) {rs.close();}
+				if(stmt!=null) {stmt.close();}
+				DbConnector.getInstancia().releaseConn();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return persona;
+	}
+	
 	public void add(Persona p) {
 		PreparedStatement stmt= null;
 		ResultSet keyResultSet=null;
@@ -112,8 +149,8 @@ public class DataPersona {
                 p.setId(keyResultSet.getInt(1));
             }
             
-            DataRol dr = new DataRol();
-            dr.setRolesDePersona(p);
+            //DataRol dr = new DataRol();
+            //dr.setRolesDePersona(p);
 
 			
 		}  catch (SQLException e) {
