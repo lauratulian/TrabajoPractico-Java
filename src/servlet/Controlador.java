@@ -28,7 +28,7 @@ public class Controlador extends HttpServlet {
 
 	
     private void procesarRequest(HttpServletRequest request, HttpServletResponse response, String menu, String accion) throws ServletException, IOException {
-		if(menu.equals("Principal")){
+    	if(menu.equals("Principal")){
 			request.getRequestDispatcher("Principal.jsp").forward(request, response);		
 		}
 		if(menu.equals("Libros")){
@@ -46,7 +46,7 @@ public class Controlador extends HttpServlet {
 		if(menu.equals("Local")){
 			request.getRequestDispatcher("pages/Local.jsp").forward(request, response);
 		}
-		if(menu.equals("Personas")){
+		if(menu.equals("Persona")){
 			switch (accion) {
 			case "Listar":
 				LinkedList<Persona> ListaPersonas= pl.getAll();
@@ -57,7 +57,6 @@ public class Controlador extends HttpServlet {
 				String dni= request.getParameter("txtDni");
 				String nombre= request.getParameter("txtNombre");
 				String mail= request.getParameter("txtMail");
-				String contrasenia= request.getParameter("txtContrasenia");
 				String telefono= request.getParameter("txtTelefono");
 				String direccion= request.getParameter("txtDireccion");
 				String adicional= request.getParameter("txtAdicional");
@@ -65,23 +64,24 @@ public class Controlador extends HttpServlet {
 				persona.setDni(dni);
 				persona.setNombre(nombre);
 				persona.setMail(mail);
-				persona.setContrasenia(contrasenia);
 				persona.setTelefono(telefono);
 				persona.setDireccion(direccion);
 				persona.setAdicional(adicional);
 				
 				pl.add(persona);
-				request.getRequestDispatcher("controlador?menu=Personas&accion=Listar").forward(request, response);
+				request.getRequestDispatcher("controlador?menu=Persona&accion=Listar").forward(request, response);
 				break;
 				
 			case "Editar":
-				idCliente = Integer.parseInt(request.getParameter("id"));
-				persona.setId(idCliente);
-				
-				Persona per = pl.getById(persona);
-				request.setAttribute(menu, accion)
-				
-				pl.update(persona);
+				String idParam = request.getParameter("id");
+				if (idParam != null && !idParam.isEmpty()) {
+					idCliente = Integer.parseInt(idParam);
+					Persona per = pl.getById(idCliente);
+					if (per != null) {
+						request.setAttribute("persona", per);
+						request.getRequestDispatcher("pages/EditarCliente.jsp").forward(request, response);
+				    }
+				} 
 				break;
 				
 			case "Eliminar":
@@ -91,9 +91,11 @@ public class Controlador extends HttpServlet {
 			default:
 				throw new AssertionError();
 			}
-			request.getRequestDispatcher("pages/Clientes.jsp").forward(request, response);
+			request.getRequestDispatcher("pages/ListarCliente.jsp").forward(request, response);
             }
         }
+    
+    
     
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

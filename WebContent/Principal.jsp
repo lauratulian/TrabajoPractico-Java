@@ -36,7 +36,7 @@
 					<li style="margin-left: 10px; border: none"
 						class="btn btn-outline-light"><a class="nav-link" href="controlador?menu=Ventas" target="myFrame">Ventas</a></li>
 					<li style="margin-left: 10px; border: none"
-						class="btn btn-outline-light"><a class="nav-link" href="controlador?menu=Personas&accion=Listar" target="myFrame">Clientes</a></li>
+						class="btn btn-outline-light"><a class="nav-link" href="controlador?menu=Persona&accion=Listar" target="myFrame">Clientes</a></li>
 				</ul>
 				<div class="botton">
 					<button style="border: none"

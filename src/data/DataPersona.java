@@ -89,7 +89,7 @@ public class DataPersona {
 	}
 	
 	
-	public Persona getById(Persona per) {
+	public Persona getById(int id) {
 		//DataRol dr=new DataRol();
 		Persona persona= new Persona();
 		PreparedStatement stmt=null;
@@ -98,7 +98,7 @@ public class DataPersona {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
 					"SELECT id_persona, dni, nombre, mail, telefono, direccion, adicional FROM persona WHERE id_persona=?"
 					);
-			stmt.setInt(1, per.getId());
+			stmt.setInt(1, id);
 			rs=stmt.executeQuery();
 			if(rs!=null && rs.next()) {
 				persona=new Persona();
@@ -132,16 +132,15 @@ public class DataPersona {
 		try {
 			stmt=DbConnector.getInstancia().getConn().
 					prepareStatement(
-							"INSERT into persona(dni, nombre, mail, contrasenia, telefono, direccion, adicional) values(?,?,?,?,?,?,?)",
+							"INSERT into persona(dni, nombre, mail,  telefono, direccion, adicional) values(?,?,?,?,?,?)",
 							PreparedStatement.RETURN_GENERATED_KEYS
 							);
 			stmt.setString(1, p.getDni());
 			stmt.setString(2, p.getNombre());
 			stmt.setString(3, p.getMail());
-			stmt.setString(4, p.getContrasenia());
-			stmt.setString(5, p.getTelefono());
-			stmt.setString(6, p.getDireccion());
-			stmt.setString(7, p.getAdicional());
+			stmt.setString(4, p.getTelefono());
+			stmt.setString(5, p.getDireccion());
+			stmt.setString(6, p.getAdicional());
 			stmt.executeUpdate();
 			
 			keyResultSet=stmt.getGeneratedKeys();

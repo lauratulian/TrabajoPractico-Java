@@ -16,7 +16,6 @@ public class PersonaLogic {
     }
     
 	public void add(Persona persona) {
-		persona.setContrasenia(this.convertirSHA256(persona.getContrasenia()));
 		this.dataPersona.add(persona);
 	}
 	
@@ -62,9 +61,9 @@ public class PersonaLogic {
         return null;}
 	}
 	
-	public Persona getById(Persona persona) 
+	public Persona getById(int id) 
 	{
-		return dataPersona.getById(persona);
+		return dataPersona.getById(id);
 	}
 }
 
