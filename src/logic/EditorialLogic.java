@@ -3,7 +3,9 @@ package logic;
 import java.util.LinkedList;
 
 import data.DataEditorial;
+import entities.Categoria;
 import entities.Editorial;
+import entities.Libro;
 
 public class EditorialLogic {
 
@@ -19,9 +21,9 @@ public class EditorialLogic {
         return this.dataEditorial.getById(editorialToSearch);
     }
     
-    public Editorial getByDesc(Editorial editorialToSearch)
+    public Editorial getByDesc(String descripcionToSearch)
     {
-        return this.dataEditorial.getByDesc(editorialToSearch);
+        return this.dataEditorial.getByDesc(descripcionToSearch);
     }
     
 	public void add(Editorial editorial) {
@@ -38,6 +40,10 @@ public class EditorialLogic {
     {
         this.dataEditorial.remove(editorial);
     }
+	
+	public void setEditorialLibro (Editorial edit, Libro lib) {
+		this.dataEditorial.setEditorialLibro(edit, lib);
+	}
 
 }
 

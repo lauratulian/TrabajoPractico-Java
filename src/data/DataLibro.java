@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 
 import entities.*;
+import logic.CategoriaLogic;
+import logic.CategoriaLogic;
 
 public class DataLibro {
 	
@@ -36,18 +38,21 @@ public class DataLibro {
 					Categoria categoriaToSearch = new Categoria();
 					DataCategoria dataCategoria = new DataCategoria();
 					categoriaToSearch.setId(rs.getInt("categoria"));
-					libro.setCategoria(dataCategoria.getById(categoriaToSearch));
+					Categoria categoria = dataCategoria.getById(categoriaToSearch);
+					libro.setCategoria(categoria);
 					
 					Autor autorToSearch = new Autor();
 					DataAutor dataAutor = new DataAutor();
 					autorToSearch.setId(rs.getInt("autor"));
-					libro.setAutor(dataAutor.getById(autorToSearch));
+					Autor autor = dataAutor.getById(autorToSearch);
+					libro.setAutor(autor);
 					
 					
 					Editorial editorialToSearch = new Editorial();
 					DataEditorial dataEditorial = new DataEditorial();
 					editorialToSearch.setId(rs.getInt("editorial"));
-					libro.setEditorial(dataEditorial.getById(editorialToSearch));
+					Editorial editorial = dataEditorial.getById(editorialToSearch);
+					libro.setEditorial(editorial);
 					
 					libros.add(libro);
 				}
@@ -70,7 +75,7 @@ public class DataLibro {
 		return libros;
 	}
 	
-	public Libro getById(Libro libroToSearch) {
+	public Libro getById(int idLibro) {
 		Libro libro=null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
@@ -78,7 +83,7 @@ public class DataLibro {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
 					"SELECT * FROM libro WHERE id_libro=?"
 					);
-			stmt.setInt(1, libroToSearch.getId());
+			stmt.setInt(1, idLibro);
 			rs=stmt.executeQuery();
 			if(rs!=null && rs.next()) {
 				libro=new Libro();
@@ -125,7 +130,7 @@ public class DataLibro {
 	}
 	
 	
-	public Libro getByTitulo(Libro libroToSearch) {
+	public Libro getByTitulo(String titulo) {
 		Libro libro=null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
@@ -133,7 +138,7 @@ public class DataLibro {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
 					"SELECT * FROM libro WHERE titulo=?"
 					);
-			stmt.setString(1, libroToSearch.getDescripcion());
+			stmt.setString(1, titulo);
 			rs=stmt.executeQuery();
 			if(rs!=null && rs.next()) {
 				libro=new Libro();
@@ -359,7 +364,15 @@ public class DataLibro {
 			stmt.setInt(10, libro.getCategoria().getId());
 		    stmt.setInt(11, libro.getAutor().getId());
 		    stmt.setInt(12, libro.getEditorial().getId());
+		    
+		    DataAutor dataAutor= new DataAutor();
+			dataAutor.setAutorLibro(libro.getAutor(), libro);
 			
+			DataEditorial dataEditorial= new DataEditorial();
+			dataEditorial.setEditorialLibro(libro.getEditorial(), libro);
+			
+			DataCategoria dataCategoria= new DataCategoria();
+			dataCategoria.setCategoriaLibro(libro.getCategoria(), libro);
 			stmt.executeUpdate();
 			
 			keyResultSet=stmt.getGeneratedKeys();
@@ -367,14 +380,7 @@ public class DataLibro {
                 libro.setId(keyResultSet.getInt(1));
             }
             
-            DataAutor dataAutor= new DataAutor();
-			dataAutor.setAutor(libro);
-			
-			DataEditorial dataEditorial= new DataEditorial();
-			dataEditorial.setEditorial(libro);
-			
-			DataCategoria dataCategoria= new DataCategoria();
-			dataCategoria.setCategoria(libro);
+            
 
 		} catch (SQLException e) {
             e.printStackTrace();
@@ -444,7 +450,7 @@ public class DataLibro {
 	}
 	
 	public void actualizarStock(Libro libroToSearch, int cantidad) {
-	    Libro libro = this.getById(libroToSearch);
+	    Libro libro = this.getById(libroToSearch.getId());
 	    
 	    if (libro != null) {
 	        int stockActual = libro.getStock();

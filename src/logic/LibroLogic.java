@@ -18,14 +18,14 @@ public class LibroLogic {
         return this.dataLibro.getAll();
     }
 	
-    public Libro getById(Libro libroToSearch)
+    public Libro getById(int libroToSearch)
     {
         return this.dataLibro.getById(libroToSearch);
     }
     
-    public Libro getByTitulo(Libro libroToSearch)
+    public Libro getByTitulo(String descripcionToSearch)
     {
-        return this.dataLibro.getByTitulo(libroToSearch);
+        return this.dataLibro.getByTitulo(descripcionToSearch);
     }
     
     public LinkedList<Libro> getByCategoria(Categoria categoria)

@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 import data.DataAutor;
 import entities.Autor;
+import entities.Editorial;
+import entities.Libro;
 
 public class AutorLogic {
 
@@ -19,9 +21,9 @@ public class AutorLogic {
         return this.dataAutor.getById(autorToSearch);
     }
     
-    public Autor getByDesc(Autor autorToSearch)
+    public Autor getByDesc(String descripcionToSearch)
     {
-        return this.dataAutor.getByDesc(autorToSearch);
+        return this.dataAutor.getByDesc(descripcionToSearch);
     }
     
 	public void add(Autor autor) {
@@ -38,4 +40,8 @@ public class AutorLogic {
     {
         this.dataAutor.remove(autor);
     }
+	
+	public void setAutorLibro (Autor autor, Libro lib) {
+		this.dataAutor.setAutorLibro(autor, lib);
+	}
 }

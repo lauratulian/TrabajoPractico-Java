@@ -75,7 +75,7 @@ public class DataAutor {
 		return autor;
 	}
 	
-	public Autor getByDesc(Autor autorToSearch) {
+	public Autor getByDesc(String descripcion) {
 		Autor autor=null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
@@ -83,7 +83,7 @@ public class DataAutor {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
 					"SELECT * FROM autor WHERE descripcion=?"
 					);
-			stmt.setString(1, autorToSearch.getDescripcion());
+			stmt.setString(1, descripcion);
 			rs=stmt.executeQuery();
 			if(rs!=null && rs.next()) {
 				autor=new Autor();
@@ -105,18 +105,17 @@ public class DataAutor {
 		return autor;
 	}
 	
-	public void setAutor(Libro lib) {
+	public void setAutorLibro(Autor autor, Libro lib) {
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
-					"SELECT autor.* FROM autor INNER JOIN libro ON autor.id = libro.autor_id WHERE libro.id_libro = ?"
+					"SELECT autor.* FROM autor INNER JOIN libro ON autor.id_autor = libro.autor WHERE libro.id_libro = ?"
 					);
 			stmt.setInt(1, lib.getId());
 			rs= stmt.executeQuery();
 			if(rs!=null) {
 				while(rs.next()) {
-					Autor autor=new Autor();
 					autor.setId(rs.getInt("id_autor"));
 					autor.setDescripcion(rs.getString("descripcion"));
 					lib.setAutor(autor);

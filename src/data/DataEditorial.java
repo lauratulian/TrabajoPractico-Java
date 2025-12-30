@@ -75,7 +75,7 @@ public class DataEditorial {
 		return editorial;
 	}
 	
-	public Editorial getByDesc(Editorial editorialToSearch) {
+	public Editorial getByDesc(String descripcion) {
 		Editorial editorial=null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
@@ -83,7 +83,7 @@ public class DataEditorial {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
 					"SELECT * FROM editorial WHERE descripcion=?"
 					);
-			stmt.setString(1, editorialToSearch.getDescripcion());
+			stmt.setString(1, descripcion);
 			rs=stmt.executeQuery();
 			if(rs!=null && rs.next()) {
 				editorial=new Editorial();
@@ -105,18 +105,17 @@ public class DataEditorial {
 		return editorial;
 	}
 	
-	public void setEditorial(Libro lib) {
+	public void setEditorialLibro(Editorial editorial, Libro lib) {
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
-					  "SELECT editorial.* FROM editorial INNER JOIN libro ON editorial.id = libro.editorial_id WHERE libro.id_libro = ?"
+					  "SELECT editorial.* FROM editorial INNER JOIN libro ON editorial.id_editorial = libro.editorial WHERE libro.id_libro = ?"
 					);
 			stmt.setInt(1, lib.getId());
 			rs= stmt.executeQuery();
 			if(rs!=null) {
 				while(rs.next()) {
-					Editorial editorial=new Editorial();
 					editorial.setId(rs.getInt("id"));
 					editorial.setDescripcion(rs.getString("descripcion"));
 					lib.setEditorial(editorial);

@@ -1,6 +1,7 @@
 package entities;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 public class Libro {
 	private int id;
@@ -16,6 +17,8 @@ public class Libro {
 	private Categoria categoria;
 	private Editorial editorial;
 	private Autor autor;
+	private byte[] imagen;
+
 	
 	public int getId() {
 		return id;
@@ -96,11 +99,20 @@ public class Libro {
 	public void setAutor(Autor autor) {
 		this.autor = autor;
 	}
+	
+	public byte[] getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
+    }
+
 	@Override
 	public String toString() {
 		return "Libro [id=" + id + ", titulo=" + titulo + ", descripcion=" + descripcion + ", isbn=" + isbn + ", peso="
 				+ peso + ", idioma=" + idioma + ", fecha_publicacion=" + fecha_publicacion + ", cantidad_paginas="
 				+ cantidad_paginas + ", stock=" + stock + ", precio=" + precio + ", categoria=" + categoria
-				+ ", editorial=" + editorial + ", autor=" + autor + "]\n";
+				+ ", editorial=" + editorial + ", autor=" + autor + ", imagen=" + Arrays.toString(imagen) + "]";
 	}
 }

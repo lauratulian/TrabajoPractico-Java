@@ -13,7 +13,6 @@ public class Persona {
 	private String adicional;
 	private HashMap<Integer, Rol> roles;
 	
-	
 	public int getId() {
 		return id;
 	}

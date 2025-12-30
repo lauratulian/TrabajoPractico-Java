@@ -22,7 +22,7 @@ public class CarritoLogic {
 	    public LinkedList<Libro> getLibrosEnCarrito() {
 	        return librosEnCarrito;
 	    }
-
+	    
 	    public void clearCarrito() {
 	        librosEnCarrito.clear();
 	    }

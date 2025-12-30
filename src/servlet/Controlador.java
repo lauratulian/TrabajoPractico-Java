@@ -1,129 +1,206 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.LinkedList;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate; 
+import javax.servlet.http.*;
+import javax.servlet.annotation.MultipartConfig;
 
-import entities.Persona;
-import logic.PersonaLogic;
+import entities.*;
+import logic.*;
 
-/**
- * Servlet implementation class Controlador
- */
 @WebServlet("/controlador")
 public class Controlador extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	Persona persona= new Persona();
-	PersonaLogic pl= new PersonaLogic();
-	int idCliente;
-	
-    public Controlador() {
-        super();
+    private static final long serialVersionUID = 1L;
+
+    private int idCliente;
+    private int idLibro;
+
+    private static final int ROL_ADMIN = 1;
+    private static final int ROL_CLIENTE = 2;
+
+    protected void procesarRequest(HttpServletRequest request, HttpServletResponse response,
+                                   String menu, String accion)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+        Persona usuario = (session != null) ? (Persona) session.getAttribute("usuario") : null;
+
+        LibroLogic ll = new LibroLogic();
+        PersonaLogic pl = new PersonaLogic();
+        CategoriaLogic categoriaLogic = new CategoriaLogic();
+        EditorialLogic editorialLogic = new EditorialLogic();
+        AutorLogic autorLogic = new AutorLogic();
+
+
+        if ("Principal".equals(menu)) {
+            request.getRequestDispatcher("pages/Principal.jsp").forward(request, response);
+            return;
+        }
+
+        if ("Contacto".equals(menu)) {
+            request.getRequestDispatcher("pages/Contacto.jsp").forward(request, response);
+            return;
+        }
+
+        if ("Local".equals(menu)) {
+            request.getRequestDispatcher("pages/Local.jsp").forward(request, response);
+            return;
+        }
+
+        if ("Ventas".equals(menu)) {
+            if (usuario == null || !usuario.hasRol(crearRol(ROL_CLIENTE))) {
+                response.sendRedirect("pages/AccesoDenegado.jsp");
+                return;
+            }
+            request.getRequestDispatcher("pages/Ventas.jsp").forward(request, response);
+            return;
+        }
+
+
+        if ("Catalogo".equals(menu)) {
+            response.sendRedirect("controlador?menu=Categoria&accion=Listar");
+            return;
+        }
+
+        if ("Persona".equals(menu)) {
+
+            if (!esAdmin(usuario, response)) return;
+
+            if ("Listar".equals(accion)) {
+                request.setAttribute("personas", pl.getAll());
+                request.getRequestDispatcher("pages/ListarCliente.jsp").forward(request, response);
+            }
+
+            if ("Agregar".equals(accion)) {
+                Persona p = new Persona();
+                p.setDni(request.getParameter("txtDni"));
+                p.setNombre(request.getParameter("txtNombre"));
+                p.setMail(request.getParameter("txtMail"));
+                p.setTelefono(request.getParameter("txtTelefono"));
+                p.setDireccion(request.getParameter("txtDireccion"));
+                p.setAdicional(request.getParameter("txtAdicional"));
+                pl.add(p);
+                response.sendRedirect("controlador?menu=Persona&accion=Listar");
+            }
+
+            return;
+        }
+
+        if ("Libro".equals(menu)) {
+
+            if (!esAdmin(usuario, response)) return;
+
+            if ("Listar".equals(accion)) {
+                request.setAttribute("libros", ll.getAll());
+                request.getRequestDispatcher("pages/ListarLibro.jsp").forward(request, response);
+            }
+
+            if ("Listar2".equals(accion)) {
+                request.setAttribute("libros", ll.getAll());
+                request.getRequestDispatcher("pages/ListarLibro2.jsp").forward(request, response);
+            }
+            
+            if ("Agregar".equals(accion)) {
+
+                Libro libro = new Libro();
+
+                libro.setTitulo(request.getParameter("txtTitulo"));
+                libro.setDescripcion(request.getParameter("txtDescripcion"));
+                libro.setIsbn(request.getParameter("txtIsbn"));
+                libro.setIdioma(request.getParameter("txtIdioma"));
+                libro.setFecha_publicacion(
+                        LocalDate.parse(request.getParameter("txtFechaPublicacion"))
+                );
+                libro.setCantidad_paginas(
+                        Integer.parseInt(request.getParameter("txtCantidadPaginas"))
+                );
+                libro.setStock(
+                        Integer.parseInt(request.getParameter("txtStock"))
+                );
+                libro.setPrecio(
+                        Double.parseDouble(request.getParameter("txtPrecio"))
+                );
+
+                int idCategoria = Integer.parseInt(request.getParameter("txtCategoria"));
+                Categoria c = new Categoria();
+                c.setId(idCategoria);
+                libro.setCategoria(categoriaLogic.getById(c));
+
+                String descEditorial = request.getParameter("txtEditorial");
+                Editorial editorial = editorialLogic.getByDesc(descEditorial);
+                if (editorial == null) {
+                    editorial = new Editorial();
+                    editorial.setDescripcion(descEditorial);
+                    editorialLogic.add(editorial);
+                    editorial = editorialLogic.getByDesc(descEditorial);
+                }
+                libro.setEditorial(editorial);
+
+                String descAutor = request.getParameter("txtAutor");
+                Autor autor = autorLogic.getByDesc(descAutor);
+                if (autor == null) {
+                    autor = new Autor();
+                    autor.setDescripcion(descAutor);
+                    autorLogic.add(autor);
+                    autor = autorLogic.getByDesc(descAutor);
+                }
+                libro.setAutor(autor);
+
+                Part filePart = request.getPart("imagen");
+                if (filePart != null && filePart.getSize() > 0) {
+                    byte[] imagenBytes = filePart.getInputStream().readAllBytes();
+                    libro.setImagen(imagenBytes);
+                }
+
+                ll.add(libro);
+
+                response.sendRedirect("controlador?menu=Libro&accion=Listar2");
+                return;
+            }
+
+            return;
+        }
+
+        if ("Categoria".equals(menu)) {
+
+            if ("Listar".equals(accion)) {
+                request.setAttribute("categorias", categoriaLogic.getAll());
+                request.getRequestDispatcher("pages/Catalogo.jsp").forward(request, response);
+            }
+
+            return;
+        }
+
+        response.sendRedirect("index.jsp");
     }
 
-	
-    private void procesarRequest(HttpServletRequest request, HttpServletResponse response, String menu, String accion) throws ServletException, IOException {
-    	if(menu.equals("Principal")){
-			request.getRequestDispatcher("Principal.jsp").forward(request, response);		
-		}
-		if(menu.equals("Libros")){
-			request.getRequestDispatcher("pages/Libros.jsp").forward(request, response);		
-		}
-		if(menu.equals("Contacto")){
-			request.getRequestDispatcher("pages/Contacto.jsp").forward(request, response);	
-		}
-		if(menu.equals("Catalogo")){
-			request.getRequestDispatcher("pages/Catalogo.jsp").forward(request, response);
-		}
-		if(menu.equals("Ventas")){
-			request.getRequestDispatcher("pages/Ventas.jsp").forward(request, response);
-		}
-		if(menu.equals("Local")){
-			request.getRequestDispatcher("pages/Local.jsp").forward(request, response);
-		}
-		if(menu.equals("Persona")){
-			switch (accion) {
-			case "Listar":
-				LinkedList<Persona> ListaPersonas= pl.getAll();
-				request.setAttribute("personas", ListaPersonas);
-				break;
-				
-			case "Agregar":
-				String dni= request.getParameter("txtDni");
-				String nombre= request.getParameter("txtNombre");
-				String mail= request.getParameter("txtMail");
-				String telefono= request.getParameter("txtTelefono");
-				String direccion= request.getParameter("txtDireccion");
-				String adicional= request.getParameter("txtAdicional");
-				
-				persona.setDni(dni);
-				persona.setNombre(nombre);
-				persona.setMail(mail);
-				persona.setTelefono(telefono);
-				persona.setDireccion(direccion);
-				persona.setAdicional(adicional);
-				
-				pl.add(persona);
-				request.getRequestDispatcher("controlador?menu=Persona&accion=Listar").forward(request, response);
-				break;
-				
-			case "Editar":
-				String idParam = request.getParameter("id");
-				if (idParam != null && !idParam.isEmpty()) {
-					idCliente = Integer.parseInt(idParam);
-					Persona per = pl.getById(idCliente);
-					if (per != null) {
-						request.setAttribute("persona", per);
-						request.getRequestDispatcher("pages/EditarCliente.jsp").forward(request, response);
-				    }
-				} 
-				break;
-				
-			case "Eliminar":
-				pl.delete(persona);
-				break;
-				
-			default:
-				throw new AssertionError();
-			}
-			request.getRequestDispatcher("pages/ListarCliente.jsp").forward(request, response);
-            }
+    private boolean esAdmin(Persona usuario, HttpServletResponse response) throws IOException {
+        if (usuario == null || !usuario.hasRol(crearRol(ROL_ADMIN))) {
+            response.sendRedirect("pages/AccesoDenegado.jsp");
+            return false;
         }
-    
-    
-    
-    
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	String menu = request.getParameter("menu");
-    	String accion = request.getParameter("accion");
+        return true;
+    }
 
-    	procesarRequest(request, response, menu, accion);
-	}
+    private Rol crearRol(int idRol) {
+        Rol r = new Rol();
+        r.setId(idRol);
+        return r;
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    String menu = request.getParameter("menu");
-	    String accion = request.getParameter("accion");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        procesarRequest(request, response,
+                request.getParameter("menu"),
+                request.getParameter("accion"));
+    }
 
-	    procesarRequest(request, response, menu, accion);
-	}
-
-	
-
-
-    
-	
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	
-
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        procesarRequest(request, response,
+                request.getParameter("menu"),
+                request.getParameter("accion"));
+    }
 }

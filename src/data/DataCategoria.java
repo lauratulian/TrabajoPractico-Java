@@ -45,7 +45,7 @@ public class DataCategoria {
 		return categorias;
 	}
 	
-	public Categoria getById(Categoria categoriaToSearch) {
+	public Categoria getById(Categoria cat) {
 		Categoria categoria=null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
@@ -53,7 +53,7 @@ public class DataCategoria {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
 					"SELECT * FROM categoria WHERE id_categoria=?"
 					);
-			stmt.setInt(1, categoriaToSearch.getId());
+			stmt.setInt(1, cat.getId());
 			rs=stmt.executeQuery();
 			if(rs!=null && rs.next()) {
 				categoria=new Categoria();
@@ -75,7 +75,7 @@ public class DataCategoria {
 		return categoria;
 	}
 	
-	public Categoria getByDesc(Categoria categoriaToSearch) {
+	public Categoria getByDesc(String descripcion) {
 		Categoria categoria=null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
@@ -83,7 +83,7 @@ public class DataCategoria {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
 					"SELECT * FROM categoria WHERE descripcion=?"
 					);
-			stmt.setString(1, categoriaToSearch.getDescripcion());
+			stmt.setString(1, descripcion);
 			rs=stmt.executeQuery();
 			if(rs!=null && rs.next()) {
 				categoria=new Categoria();
@@ -104,25 +104,22 @@ public class DataCategoria {
 		
 		return categoria;
 	}
-	
-	public void setCategoria(Libro lib) {
+	public void setCategoriaLibro(Categoria cat, Libro lib) {
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
-					"SELECT categoria.* FROM categoria INNER JOIN libro ON categoria.id = libro.categoria_id WHERE libro.id_libro = ?"
+					"SELECT categoria.* FROM categoria INNER JOIN libro ON categoria.id_categoria = libro.categoria WHERE libro.id_libro= ?"
 					);
 			stmt.setInt(1, lib.getId());
 			rs= stmt.executeQuery();
 			if(rs!=null) {
 				while(rs.next()) {
-					Categoria categoria=new Categoria();
-					categoria.setId(rs.getInt("id_categoria"));
-					categoria.setDescripcion(rs.getString("descripcion"));
-					lib.setCategoria(categoria);
+					cat.setId(rs.getInt("id_categoria"));
+					cat.setDescripcion(rs.getString("descripcion"));
+					lib.setCategoria(cat);
 				}
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {

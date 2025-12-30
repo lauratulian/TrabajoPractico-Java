@@ -18,7 +18,7 @@
 	<div class="d-flex">
 	    <div class="card col-sm-6">
     	<div class card="card-body">
-    		<form  method="post">
+    		<form action="controlador?menu=Persona&accion=Actualizar" method="post">
     			<div>
     				<label>Dni</label>
     				<input type="text" value="<%=persona.getDni()%>"  name="txtDni" class="form-control">

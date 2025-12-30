@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import data.DataCategoria;
 import entities.Categoria;
+import entities.Libro;
 
 public class CategoriaLogic {
 	
@@ -19,9 +20,9 @@ public class CategoriaLogic {
         return this.dataCategoria.getById(categoriaToSearch);
     }
     
-    public Categoria getByDesc(Categoria categoriaToSearch)
+    public Categoria getByDesc(String descripcionToSearch)
     {
-        return this.dataCategoria.getByDesc(categoriaToSearch);
+        return this.dataCategoria.getByDesc(descripcionToSearch);
     }
     
 	public void add(Categoria categoria) {
@@ -38,5 +39,8 @@ public class CategoriaLogic {
      {
           this.dataCategoria.remove(categoria);
      }
+	public void setCategoriaLibro (Categoria cat, Libro lib) {
+		this.dataCategoria.setCategoriaLibro(cat, lib);
+	}
 
 }
