@@ -61,7 +61,6 @@ public class DbConnector {
 		try {
 			if(conn==null || conn.isClosed()) {
 				conn=DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/"+db, user, password);
-				conectados=0;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -92,9 +92,10 @@ public class DataPersona {
 	
 	public Persona getById(int id) {
 		DataRol dr=new DataRol();
-		Persona persona= new Persona();
+		Persona persona= null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
+		
 		try {
 			stmt=DbConnector.getInstancia().getConn().prepareStatement(
 					"SELECT id_persona, dni, nombre, mail, telefono, direccion, adicional FROM persona WHERE id_persona=?"

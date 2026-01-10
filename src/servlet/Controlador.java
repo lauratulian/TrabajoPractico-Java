@@ -13,6 +13,11 @@ import entities.*;
 import logic.*;
 
 @WebServlet("/controlador")
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024,      
+    maxFileSize = 1024 * 1024 * 5,         
+    maxRequestSize = 1024 * 1024 * 10      
+)
 public class Controlador extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
