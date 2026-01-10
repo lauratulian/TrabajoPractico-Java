@@ -9,7 +9,7 @@
     <!-- HERO -->
     <div class="row mb-5">
         <div class="col-md-6">
-            <h1 class="fw-bold">Bienvenido a Communitas</h1>
+            <h1 class="fw-bold">Bienvendo a Trama</h1>
             <p class="text-muted">
                 Descubrí nuestras últimas novedades y libros destacados.
             </p>

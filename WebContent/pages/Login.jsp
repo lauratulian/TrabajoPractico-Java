@@ -12,14 +12,14 @@
 	<div class="container mt-4 col-lg-4">
 		<div class="card col-sm-10">
 			<div class= "card-body">
-				<form class="form-sign" action="signin" method="post">
+				<form class="form-sign" action="<%= request.getContextPath() %>/signin" method="post">
 					<div class="form group text-center">
 						<h3>Login</h3>
-						<label>Bienvenidos al Sistema</label>
+						<label>Bienvenido a Trama</label>
 					</div>	
 						
 					<div class="form group">
-						<label>Usuario:</label>
+						<label>Mail:</label>
 						<input type="text" name="txtmail" class="form-control">
 					</div>
 						<label>Password:</label>

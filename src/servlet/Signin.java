@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import entities.Persona;
 import logic.PersonaLogic;
@@ -31,45 +32,49 @@ public class Signin extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		response.sendRedirect("index.jsp");
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Persona persona = new Persona();
-		PersonaLogic ctrl = new PersonaLogic();
-		
-		try {
-		String accion= request.getParameter("accion");
-		if (accion.equalsIgnoreCase("Ingresar")) {
-			
-			String mail = request.getParameter("txtmail");
-			String pass = request.getParameter("txtpass");
-			
-			persona.setMail(mail);
-			persona.setContrasenia(pass);
-			
-			ctrl.validate(persona);
-			
-			if(ctrl.validate(persona)!=null) {
-				
-				request.getSession().setAttribute("usuario", persona);
-				request.getRequestDispatcher("controlador?accion=Principal").forward(request, response);
 
-			}
-			
-			else {
-				request.getRequestDispatcher("index.jsp").forward(request, response);
-			}
-		}
-		else {
-			request.getRequestDispatcher("index.jsp").forward(request, response);
-		}			
-	 } catch (Exception e) {
-	    e.printStackTrace(); 
-	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error interno del servidor: " + e.getMessage());
-	}
+        try {
+            String accion = request.getParameter("accion");
+
+            if ("Ingresar".equalsIgnoreCase(accion)) {
+
+                String mail = request.getParameter("txtmail");
+                String pass = request.getParameter("txtpass");
+
+                Persona persona = new Persona();
+                persona.setMail(mail);
+                persona.setContrasenia(pass);
+
+                PersonaLogic ctrl = new PersonaLogic();
+
+                Persona personaLogin = ctrl.validate(persona);
+
+                if (personaLogin != null) {
+                    HttpSession session = request.getSession(true);
+                    session.setAttribute("usuario", personaLogin);
+
+                    response.sendRedirect("controlador?menu=Principal");
+                } else {
+                    request.setAttribute("error", "Usuario o contraseña incorrectos");
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                }
+
+            } else {
+                response.sendRedirect("index.jsp");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(
+                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "Error interno del servidor");
+	    }
 	}
 }

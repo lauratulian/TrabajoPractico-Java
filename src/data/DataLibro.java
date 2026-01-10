@@ -9,7 +9,6 @@ import java.util.LinkedList;
 
 import entities.*;
 import logic.CategoriaLogic;
-import logic.CategoriaLogic;
 
 public class DataLibro {
 	
@@ -34,6 +33,7 @@ public class DataLibro {
 					libro.setFecha_publicacion(rs.getObject("fecha_publicacion", LocalDate.class));
 					libro.setCantidad_paginas(rs.getInt("cantidad_paginas"));
 					libro.setStock(rs.getInt("stock"));
+					libro.setImagen(rs.getString("imagen"));
 				 
 					Categoria categoriaToSearch = new Categoria();
 					DataCategoria dataCategoria = new DataCategoria();
@@ -96,6 +96,8 @@ public class DataLibro {
 				libro.setFecha_publicacion(rs.getObject("fecha_publicacion", LocalDate.class));
 				libro.setCantidad_paginas(rs.getInt("cantidad_paginas"));
 				libro.setStock(rs.getInt("stock"));
+				libro.setImagen(rs.getString("imagen"));
+				
 			 
 				Categoria categoriaToSearch = new Categoria();
 				DataCategoria dataCategoria = new DataCategoria();
@@ -152,6 +154,7 @@ public class DataLibro {
 				libro.setFecha_publicacion(rs.getObject("fecha_publicacion", LocalDate.class));
 				libro.setCantidad_paginas(rs.getInt("cantidad_paginas"));
 				libro.setStock(rs.getInt("stock"));
+				libro.setImagen(rs.getString("imagen"));
 			 
 				Categoria categoriaToSearch = new Categoria();
 				DataCategoria dataCategoria = new DataCategoria();
@@ -207,8 +210,9 @@ public class DataLibro {
 					libro.setCantidad_paginas(rs.getInt("cantidad_paginas"));
 					libro.setStock(rs.getInt("stock"));
 					libro.setPrecio(rs.getDouble("precio"));
+					libro.setImagen(rs.getString("imagen"));
 
-					categoria.setId(rs.getInt("categoria")); // 
+					categoria.setId(rs.getInt("categoria"));  
 					libro.setCategoria(categoria);
 					
 					Autor autorToSearch = new Autor();
@@ -261,6 +265,7 @@ public class DataLibro {
 					libro.setCantidad_paginas(rs.getInt("cantidad_paginas"));
 					libro.setStock(rs.getInt("stock"));
 					libro.setPrecio(rs.getDouble("precio"));
+					libro.setImagen(rs.getString("imagen"));
 					
 					Categoria categoriaToSearch = new Categoria();
 					categoriaToSearch.setId(rs.getInt("categoria"));
@@ -313,6 +318,7 @@ public class DataLibro {
 					libro.setCantidad_paginas(rs.getInt("cantidad_paginas"));
 					libro.setStock(rs.getInt("stock"));
 					libro.setPrecio(rs.getDouble("precio"));
+					libro.setImagen(rs.getString("imagen"));
 				
 					Categoria categoriaToSearch = new Categoria();
 					categoriaToSearch.setId(rs.getInt("categoria"));
@@ -349,7 +355,7 @@ public class DataLibro {
 		try {
 			stmt=DbConnector.getInstancia().getConn().
 					prepareStatement(
-							"INSERT into LIBRO(titulo, descripcion, isbn, peso, idioma, fecha_publicacion, cantidad_paginas, stock, precio, categoria, autor, editorial) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+							"INSERT into LIBRO(titulo, descripcion, isbn, peso, idioma, fecha_publicacion, cantidad_paginas, stock, precio, categoria, autor, editorial, imagen) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 							PreparedStatement.RETURN_GENERATED_KEYS
 							);
 			stmt.setString(1, libro.getTitulo());
@@ -364,6 +370,7 @@ public class DataLibro {
 			stmt.setInt(10, libro.getCategoria().getId());
 		    stmt.setInt(11, libro.getAutor().getId());
 		    stmt.setInt(12, libro.getEditorial().getId());
+		    stmt.setString(13, libro.getImagen());
 		    
 		    DataAutor dataAutor= new DataAutor();
 			dataAutor.setAutorLibro(libro.getAutor(), libro);
@@ -401,7 +408,7 @@ public class DataLibro {
 		try {
 			stmt=DbConnector.getInstancia().getConn().
 					prepareStatement(
-							"UPDATE libro set titulo = ?, descripcion = ?, isbn = ?, peso = ?, idioma = ?, fecha_publicacion = ?, cantidad_paginas = ?, stock = ?, precio = ?, categoria = ?, autor = ?, editorial = ? WHERE id_libro=?");
+							"UPDATE libro set titulo = ?, descripcion = ?, isbn = ?, peso = ?, idioma = ?, fecha_publicacion = ?, cantidad_paginas = ?, stock = ?, precio = ?, categoria = ?, autor = ?, editorial = ?, imagen = ? WHERE id_libro=?");
 			stmt.setString(1, libro.getTitulo());
 			stmt.setString(2, libro.getDescripcion());
 			stmt.setString(3, libro.getIsbn());
@@ -414,7 +421,8 @@ public class DataLibro {
 			stmt.setInt(10, libro.getCategoria().getId());
 			stmt.setInt(11, libro.getAutor().getId());
 			stmt.setInt(12, libro.getEditorial().getId());
-			stmt.setInt(13, libro.getId());
+			stmt.setString(13, libro.getImagen());
+			stmt.setInt(14, libro.getId());
 			
 			stmt.executeUpdate();
 		} catch (SQLException e) {

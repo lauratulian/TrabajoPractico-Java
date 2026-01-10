@@ -6,6 +6,8 @@ import javax.servlet.annotation.WebServlet;
 import java.time.LocalDate; 
 import javax.servlet.http.*;
 import javax.servlet.annotation.MultipartConfig;
+import java.io.File;
+import java.nio.file.Paths;
 
 import entities.*;
 import logic.*;
@@ -150,8 +152,22 @@ public class Controlador extends HttpServlet {
 
                 Part filePart = request.getPart("imagen");
                 if (filePart != null && filePart.getSize() > 0) {
-                    byte[] imagenBytes = filePart.getInputStream().readAllBytes();
-                    libro.setImagen(imagenBytes);
+
+                    String fileName = System.currentTimeMillis() + "_" +
+                                      Paths.get(filePart.getSubmittedFileName()).getFileName();
+
+                    String uploadPath = getServletContext()
+                            .getRealPath("/uploads/libros");
+
+                    File uploadDir = new File(uploadPath);
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
+
+                    String filePath = uploadPath + File.separator + fileName;
+                    filePart.write(filePath);
+
+                    libro.setImagen("uploads/libros/" + fileName);
                 }
 
                 ll.add(libro);

@@ -15,9 +15,9 @@
 <!-- TOPBAR -->
 <div class="bg-dark text-light py-1">
     <div class="container d-flex justify-content-between small">
-        <span>Bienvenido a Communitas</span>
+        <span>Bienvenido a Trama</span>
         <div>
-            <a href="#" class="text-light text-decoration-none me-3">Ingresar</a>
+            <a href="pages/Login.jsp" class="text-light text-decoration-none me-3">Ingresar</a>
             <a href="#" class="text-light text-decoration-none">Registrarse</a>
         </div>
     </div>
