@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Connection;
 import java.util.LinkedList;
 import entities.*;
 
@@ -208,27 +209,45 @@ public class DataRol {
 	}
 	
 	public void setRolesDePersona(Persona p) {
-		
-		PreparedStatement stmt= null;
-		try {
-			stmt=DbConnector.getInstancia().getConn().
-					prepareStatement(
-							"INSERT into rol_persona values(?,?);");
-			stmt.setInt(1,p.getId());
-			for(Rol r:p.getAllRoles().values()) {
-				stmt.setInt(2, r.getId());
-				stmt.executeUpdate();
-			}
-			
-		} catch (SQLException e) {
-            e.printStackTrace();
-		} finally {
-            try {
-                if(stmt!=null)stmt.close();
-                DbConnector.getInstancia().releaseConn();
-            } catch (SQLException e) {
-            	e.printStackTrace();
-            }
-		}
+
+	    PreparedStatement stmt = null;
+	    Connection conn = null;
+
+	    try {
+	        conn = DbConnector.getInstancia().getConn();
+	        conn.setAutoCommit(false); // 
+
+	        stmt = conn.prepareStatement(
+	            "INSERT INTO rol_persona VALUES (?, ?)"
+	        );
+
+	        stmt.setInt(1, p.getId());
+
+	        for (Rol r : p.getAllRoles().values()) {
+	            stmt.setInt(2, r.getId());
+	            stmt.addBatch(); 
+	        }
+
+	        stmt.executeBatch(); 
+	        conn.commit();       
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        try {
+	            if (conn != null) conn.rollback(); 
+	        } catch (SQLException ex) {
+	            ex.printStackTrace();
+	        }
+	    } finally {
+	        try {
+	            if (stmt != null) stmt.close();
+	            if (conn != null) {
+	                conn.setAutoCommit(true); 
+	                DbConnector.getInstancia().releaseConn();
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
 	}
 }
