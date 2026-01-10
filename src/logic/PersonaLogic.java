@@ -16,6 +16,9 @@ public class PersonaLogic {
     }
     
 	public void add(Persona persona) {
+		String passHash = convertirSHA256(persona.getContrasenia());
+	    persona.setContrasenia(passHash);
+	    
 		this.dataPersona.add(persona);
 	}
 	
@@ -50,15 +53,18 @@ public class PersonaLogic {
 		this.dataPersona.update(persona);
 	}
 	
-	public Persona validate(Persona persona) 
-	{
-	Persona per = dataPersona.getByUser(persona);
+	public Persona validate(Persona persona) {
 
-    if (per != null && per.getId() != 0) {
-        return per;
-    	}
-    else {
-        return null;}
+	    String passHash = convertirSHA256(persona.getContrasenia());
+	    persona.setContrasenia(passHash);
+
+	    Persona per = dataPersona.getByUser(persona);
+
+	    if (per != null && per.getId() != 0) {
+	        return per;
+	    } else {
+	        return null;
+	    }
 	}
 	
 	public Persona getById(int id) 
