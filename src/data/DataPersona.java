@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.LinkedList;
 
 import entities.Persona;
+import data.DataRol;
 
 public class DataPersona {
 	
@@ -27,7 +28,7 @@ public class DataPersona {
 					persona.setDireccion(rs.getString("direccion"));
 					persona.setAdicional(rs.getString("adicional"));
 					
-					//dr.setRoles(persona);
+					dr.setRoles(persona);
 					
 					personas.add(persona);
 				}
@@ -51,8 +52,8 @@ public class DataPersona {
 	}
 	
 	public Persona getByUser(Persona per) {
-		//DataRol dr=new DataRol();
-		Persona persona= new Persona();
+		DataRol dr=new DataRol();
+		Persona persona= null;
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
 		try {
@@ -71,7 +72,7 @@ public class DataPersona {
 				persona.setTelefono(rs.getString("telefono"));
 				persona.setDireccion(rs.getString("direccion"));
 				persona.setAdicional(rs.getString("adicional"));
-				//dr.setRoles(persona);
+				dr.setRoles(persona);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -90,7 +91,7 @@ public class DataPersona {
 	
 	
 	public Persona getById(int id) {
-		//DataRol dr=new DataRol();
+		DataRol dr=new DataRol();
 		Persona persona= new Persona();
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
@@ -109,7 +110,7 @@ public class DataPersona {
 				persona.setTelefono(rs.getString("telefono"));
 				persona.setDireccion(rs.getString("direccion"));
 				persona.setAdicional(rs.getString("adicional"));
-				//dr.setRoles(persona);
+				dr.setRoles(persona);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -148,8 +149,8 @@ public class DataPersona {
                 p.setId(keyResultSet.getInt(1));
             }
             
-            //DataRol dr = new DataRol();
-            //dr.setRolesDePersona(p);
+            DataRol dr = new DataRol();
+            dr.setRolesDePersona(p);
 
 			
 		}  catch (SQLException e) {
