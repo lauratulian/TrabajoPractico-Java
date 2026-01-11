@@ -74,6 +74,7 @@ public class DbConnector {
 		try {
 			if (conectados <= 0 && conn != null) {
 				conn.close();
+				conn =null;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
